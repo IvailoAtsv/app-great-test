@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ImageCard } from './ImageCard';
-
+import toast, { Toaster } from 'react-hot-toast';
 
 const ImageUpload = () => {
   const [photos, setPhotos] = useState([]);
@@ -31,7 +31,6 @@ const stepBtnStyles = `px-2 py-1 bg-white text-black rounded-lg cursor-pointer $
   const handleAddPhoto = async () => {
     try {
       const imageData = await convertImageToBase64(image);
-      console.log(image);
       await axios.post('http://localhost:4000/photos/upload', {
         title,
         description,
@@ -42,8 +41,9 @@ const stepBtnStyles = `px-2 py-1 bg-white text-black rounded-lg cursor-pointer $
       setTitle('');
       setDescription('');
       setImage(null);
+      toast.success('Photo added successfully!');
     } catch (error) {
-      console.error('Error adding photo:', error);
+      toast.error('Error adding photo:', error);
     }
   };
 
@@ -51,6 +51,8 @@ const stepBtnStyles = `px-2 py-1 bg-white text-black rounded-lg cursor-pointer $
     try {
       await axios.delete(`http://localhost:4000/photos/${id}`);
       fetchPhotos();
+      toast.success('Photo deleted successfully!');
+
     } catch (error) {
       console.error('Error deleting photo:', error);
     }
@@ -72,6 +74,8 @@ const stepBtnStyles = `px-2 py-1 bg-white text-black rounded-lg cursor-pointer $
   const inputStyles = 'w-[100%] md:w-[50%] p-2 rounded-md border border-gray-300 rounded text-black font-semibold';
 
   return (
+    <>
+    <div><Toaster/></div>
     <div className='w-full min-h-screen text-lg bg-black p-4 text-white flex flex-col justify-start items-center gap-4'>
       <h1 className='text-white font-bold text-3xl'>Photo Gallery</h1>
 
@@ -99,6 +103,7 @@ const stepBtnStyles = `px-2 py-1 bg-white text-black rounded-lg cursor-pointer $
         <button className={stepBtnStyles} onClick={() => setPage(page + 1)} disabled={page === totalPages}>Next</button>
       </div>
     </div>
+    </>
   );
 };
 
