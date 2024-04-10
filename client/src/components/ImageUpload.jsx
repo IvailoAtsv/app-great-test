@@ -27,7 +27,7 @@ const ImageUpload = () => {
       setPhotos(response.data.photos);
       setTotalPages(Math.ceil(response.data.totalCount / 6));
     } catch (error) {
-      console.error('Error fetching photos:', error);
+      toast.error('Error fetching photos:', error);
     }
   };
 
@@ -55,7 +55,7 @@ const ImageUpload = () => {
       toast.success('Photo deleted successfully!');
 
     } catch (error) {
-      console.error('Error deleting photo:', error);
+      toast.error('Error deleting photo:', error);
     }
   };
 
