@@ -1,4 +1,17 @@
 const router = require('express').Router();
+const Photo = require('../schemas/Photo')
+
+// I decided not to separete the logic into managers since it's a simple project.
+
+router.get('/', async (req, res) => {
+    try {
+        const photos = await Photo.find().limit(9); // Limit to 9 photos per page
+        res.json(photos);
+    } catch (error) {
+        console.error('Error fetching photos:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 router.post('/upload', async (req, res) => {
     try {
@@ -27,18 +40,9 @@ router.put('/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-app.get('/', async (req, res) => {
-    try {
-        const photos = await Photo.find().limit(9); // Limit to 9 photos per page
-        res.json(photos);
-    } catch (error) {
-        console.error('Error fetching photos:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 
 // Route to retrieve a single photo by ID
-app.get('/photos/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const photo = await Photo.findById(req.params.id);
         if (!photo) {
@@ -52,7 +56,7 @@ app.get('/photos/:id', async (req, res) => {
 });
 
 // Route to delete a photo by ID
-app.delete('/photos/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const deletedPhoto = await Photo.findByIdAndDelete(req.params.id);
         if (!deletedPhoto) {
@@ -64,3 +68,4 @@ app.delete('/photos/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+module.exports = router
