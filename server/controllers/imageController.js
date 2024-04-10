@@ -35,10 +35,24 @@ router.post('/upload', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { title, description, image } = req.body;
-        const updatedPhoto = await Photo.findByIdAndUpdate(req.params.id, { title, description, image }, { new: true });
+        const updatedFields = {};
+        
+        if (title) {
+            updatedFields.title = title;
+        }
+        if (description) {
+            updatedFields.description = description;
+        }
+        if (image) {
+            updatedFields.image = image;
+        }
+        
+        const updatedPhoto = await Photo.findByIdAndUpdate(req.params.id, updatedFields, { new: true });
+        
         if (!updatedPhoto) {
             return res.status(404).json({ error: 'Photo not found' });
         }
+        
         res.json(updatedPhoto);
     } catch (error) {
         console.error('Error updating photo:', error);
