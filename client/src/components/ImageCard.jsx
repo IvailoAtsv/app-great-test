@@ -3,7 +3,7 @@ export const ImageCard = ({photo, handleDeletePhoto,setCardToUpdate}) =>{
 
     return (
 
-        <div key={photo._id} className="border rounded-md flex flex-col justify-between border-gray-300 p-4">
+        <div key={photo._id} className="border rounded-md h-[400px] flex flex-col justify-between border-gray-300 p-4">
            
             <img src={photo.image} alt={photo.title} className="object-cover h-[70%] aspect-square" />
     
