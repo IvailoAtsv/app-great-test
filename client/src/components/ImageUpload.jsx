@@ -47,6 +47,15 @@ const stepBtnStyles = `px-2 py-1 bg-white text-black rounded-lg cursor-pointer $
     }
   };
 
+ const handleDeletePhoto = async (id) => {
+    try {
+      await axios.delete(`http://localhost:4000/photos/${id}`);
+      fetchPhotos();
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+    }
+  };
+
   const convertImageToBase64 = (imageFile) => {
     return new Promise((resolve, reject) => {
       if (!imageFile) {
@@ -81,7 +90,7 @@ const stepBtnStyles = `px-2 py-1 bg-white text-black rounded-lg cursor-pointer $
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-[90%] max-w-[1200px] ">
         {photos.map(photo => (
-          <ImageCard photo={photo} />
+          <ImageCard photo={photo} handleDeletePhoto={handleDeletePhoto}/>
         ))}
       </div>
       <div className='flex gap-2 items-center'>
