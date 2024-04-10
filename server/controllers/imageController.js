@@ -4,9 +4,14 @@ const Photo = require('../schemas/Photo')
 // I decided not to separete the logic into managers since it's a simple project.
 
 router.get('/', async (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+    const perPage = 6; // Number of items per page
     try {
-        const photos = await Photo.find().limit(9); // Limit to 9 photos per page
-        res.json(photos);
+        const photos = await Photo.find()
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+        const totalCount = await Photo.find().countDocuments();
+        res.json({ photos, totalCount });
     } catch (error) {
         console.error('Error fetching photos:', error);
         res.status(500).json({ error: 'Internal server error' });

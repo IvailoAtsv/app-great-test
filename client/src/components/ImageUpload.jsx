@@ -2,20 +2,27 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ImageCard } from './ImageCard';
 
+
 const ImageUpload = () => {
   const [photos, setPhotos] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
+  const [page, setPage] = useState(1); // current page state
+  const [totalPages, setTotalPages] = useState(1); // current totalPages state
+
+const stepBtnStyles = `px-2 py-1 bg-white text-black rounded-lg cursor-pointer ${totalPages <= 1 ? 'hidden' : ''}`
+
 
   useEffect(() => {
     fetchPhotos();
-  }, []);
+  }, [page]);
 
   const fetchPhotos = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/photos');
-      setPhotos(response.data);
+      const response = await axios.get(`http://localhost:4000/photos?page=${page}`);
+      setPhotos(response.data.photos);
+      setTotalPages(Math.ceil(response.data.totalCount / 6));
     } catch (error) {
       console.error('Error fetching photos:', error);
     }
@@ -69,14 +76,19 @@ const ImageUpload = () => {
       file:bg-blue-50 file:text-blue-700
       hover:file:bg-blue-100 file:cursor-pointer font-semibold' type="file" onChange={(e) => setImage(e.target.files[0])} />
         <button className='self-start bg-blue-50 text-blue-700 hover:bg-blue-100 px-4 py-2 rounded-md'
-         onClick={handleAddPhoto}>Add Photo</button>
+          onClick={handleAddPhoto}>Add Photo</button>
       </div>
 
-     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-[90%] max-w-[1200px] ">
-    {photos.map(photo => (
-        <ImageCard photo={photo} />
-    ))}
-</div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-[90%] max-w-[1200px] ">
+        {photos.map(photo => (
+          <ImageCard photo={photo} />
+        ))}
+      </div>
+      <div className='flex gap-2 items-center'>
+        <button className={stepBtnStyles} onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
+        <span>{page} / {totalPages}</span>
+        <button className={stepBtnStyles} onClick={() => setPage(page + 1)} disabled={page === totalPages}>Next</button>
+      </div>
     </div>
   );
 };
