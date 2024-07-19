@@ -51,8 +51,8 @@ export const UpdateCard = ({ card, setCardToUpdate }) => {
             file:bg-blue-50 file:text-blue-700
             hover:file:bg-blue-100 file:cursor-pointer`} type="file" onChange={(e) => setUpdatedImage(e.target.files[0])} />
                 <div className="mt-auto mr-auto flex items-center text-lg text-black space-x-3">
-                    <button type="button" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded" onClick={() => setCardToUpdate(null)}>Cancel</button>
-                    <button type="submit" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Update</button>
+                    <button type="button" className="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 mr-2 rounded" onClick={() => setCardToUpdate(null)}>Cancel</button>
+                    <button type="submit" className="bg-red-500 hover:bg-red-700 text-black font-bold py-2 px-4 rounded">Update</button>
                 </div>
             </form>
         </div>
