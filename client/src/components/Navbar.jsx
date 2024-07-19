@@ -45,7 +45,7 @@ export function Navbar({ }) {
                         </a>
                     </li>
                     <li className={liStyles}>
-                        <a href="/about">
+                        <a href="/uploads">
                             <button
                                 onClick={() => setNav(false)}
                                 className={`${navBtnStyle} `}

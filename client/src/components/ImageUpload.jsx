@@ -23,6 +23,7 @@ const ImageUpload = () => {
   }, [page, cardToUpdate]);
 
   const fetchPhotos = async () => {
+    console.log('fetching...');
     try {
       const response = await axios.get(`${BACKEND}/photos?page=${page}`);
       setPhotos(response.data.photos);
@@ -33,6 +34,8 @@ const ImageUpload = () => {
   };
 
   const handleAddPhoto = async (data) => {
+    console.log('adding...');
+    console.log(data.image);
     try {
       const { title, description, image } = data;
       const imageData = await convertImageToBase64(image[0]);
@@ -41,11 +44,11 @@ const ImageUpload = () => {
         description,
         image: imageData
       });
-
       fetchPhotos();
       toast.success('Photo added successfully!');
       setImagePreview(null); // Clear the preview after successful upload
     } catch (error) {
+      console.log(error);
       toast.error('Error adding photo:', error);
     }
   };
@@ -56,6 +59,7 @@ const ImageUpload = () => {
       fetchPhotos();
       toast.success('Photo deleted successfully!');
     } catch (error) {
+      console.log(error);
       toast.error('Error deleting photo:', error);
     }
   };
@@ -79,7 +83,7 @@ const ImageUpload = () => {
   return (
     <>
       <div><Toaster /></div>
-      <div className='relative w-full min-h-screen text-lg bg-whiteBg gap-4 text-black flex flex-col justify-start items-center'>
+      <div className='relative mt-[50px] w-full min-h-[40vh] text-lg bg-whiteBg gap-4 text-black flex flex-col justify-start items-center'>
         {cardToUpdate && <UpdateCard setCardToUpdate={setCardToUpdate} card={cardToUpdate} />}
         <section className='flex flex-col md:flex-row w-full max-w-7xl p-6 bg-white rounded-md'>
           <div className='w-full max-w-7xl flex flex-col gap-4'>
@@ -114,16 +118,18 @@ const ImageUpload = () => {
         </div>
           {imagePreview && <img src={imagePreview} alt="upload Preview" className="my-4 h-full sm:max-w-[50%] object-cover" />}
         </section>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-7xl">
-          {photos.map(photo => (
-            <ImageCard key={uniqid()} photo={photo} setCardToUpdate={setCardToUpdate} handleDeletePhoto={handleDeletePhoto} />
-          ))}
-        </div>
-        <div className={`flex gap-2 items-center ${totalPages <= 1 ? 'hidden' : ''}`}>
-          <button className={stepBtnStyles} onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
-          <span>{page} / {totalPages}</span>
-          <button className={stepBtnStyles} onClick={() => setPage(page + 1)} disabled={page === totalPages}>Next</button>
-        </div>
+        <section className='w-full max-w-7xl min-h-min'>
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-7xl">
+            {photos.map(photo => (
+              <ImageCard key={uniqid()} photo={photo} setCardToUpdate={setCardToUpdate} handleDeletePhoto={handleDeletePhoto} />
+            ))}
+          </div>
+          <div className={`flex gap-2 items-center ${totalPages <= 1 ? 'hidden' : ''}`}>
+            <button className={stepBtnStyles} onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
+            <span>{page} / {totalPages}</span>
+            <button className={stepBtnStyles} onClick={() => setPage(page + 1)} disabled={page === totalPages}>Next</button>
+          </div> */}
+        </section>
       </div>
     </>
   );
